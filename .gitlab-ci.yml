@@ -1,0 +1,30 @@
+stages:
+  - init
+  - build
+  - deploy
+ 
+init_sam:
+  stage: init
+  script:
+    - sam init --runtime python3.8 --name my-sam-app
+    - cd my-sam-app
+  artifacts:
+    paths:
+      - my-sam-app/**
+    expire_in: 1 hour
+ 
+build_sam:
+  stage: build
+  script:
+    - cd my-sam-app
+    - sam build
+  artifacts:
+    paths:
+      - .aws-sam/**
+    expire_in: 1 hour
+ 
+deploy_sam:
+  stage: deploy
+  script:
+    - cd my-sam-app
+    - sam deploy --guided
